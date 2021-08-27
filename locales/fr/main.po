@@ -1,214 +1,196 @@
+# Language: Français
+# Module: postInfoWidget - 0.6
+# Date: 2021-08-27 18:59:52
+# Translated with translater 2021.08.18
+
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: postInfoWidget 0.5\n"
+"Project-Id-Version: postInfoWidget 0.6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-11-12T15:08:48+00:00\n"
+"PO-Revision-Date: 2021-08-27T18:59:52+00:00\n"
 "Last-Translator: Jean-Christian Denis\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: _widgets.php:31
+#: _widgets.php:32
 msgid "PostInfoWidget: entry information list"
 msgstr "PostInfoWidget : liste d'information du billet"
 
-#: _widgets.php:34
+#: _widgets.php:35
 msgid "Show Entry informations on a widget"
 msgstr "Afficher les informations d'un billet dans un widget"
 
-#: _widgets.php:39
+#: _widgets.php:37
 msgid "About this entry"
 msgstr "Á propos de ce billet"
 
-#: _widgets.php:44
+#: _widgets.php:40
 msgid "Publish date text:"
 msgstr "Texte pour la date de publication :"
 
-#: _widgets.php:45
+#: _widgets.php:41
 msgid "Publish on %Y-%m-%d %H:%M"
 msgstr "Publié le %d/%m/%Y à %H:%M"
 
-#: _widgets.php:50
+#: _widgets.php:46
 msgid "Create date text:"
 msgstr "Texte pour la date de création :"
 
-#: _widgets.php:51
+#: _widgets.php:47
 msgid "Create on %Y-%m-%d %H:%M"
 msgstr "Créé le %d/%m/%Y à %H:%M"
 
-#: _widgets.php:56
+#: _widgets.php:52
 msgid "Update date text:"
 msgstr "Texte pour la date de dernière mise à jour :"
 
-#: _widgets.php:57
+#: _widgets.php:53
 msgid "Update on %Y-%m-%d %H:%M"
 msgstr "Mis à jour le %d/%m/%Y à %H:%M"
 
-#: _widgets.php:62
+#: _widgets.php:58
 msgid "Language (%T = name, %C = code, %F = flag):"
 msgstr "Texte pour la langue (%T = nom, %C = code, %F = drapeau) :"
 
-#: _widgets.php:63
+#: _widgets.php:59
 msgid "Language: %T %F"
 msgstr "Langue : %T %F"
 
-#: _widgets.php:68
+#: _widgets.php:64
 msgid "Author text (%T = author):"
 msgstr "Texte pour l'auteur (%T = auteur) :"
 
-#: _widgets.php:69
+#: _widgets.php:65
 msgid "Author: %T"
 msgstr "Auteur : %T"
 
-#: _widgets.php:74
+#: _widgets.php:70
 msgid "Category text (%T = category):"
 msgstr "Texte pour la catégorie (%T = catégorie) :"
 
-#: _widgets.php:75
+#: _widgets.php:71
 msgid "Category: %T"
 msgstr "Catégorie : %T"
 
-#: _widgets.php:81
+#: _widgets.php:78
 msgid "Tags text (%T = tags list):"
 msgstr "Texte pour les mots-clés (%T = liste des mots-clés) :"
 
-#: _widgets.php:82
+#: _widgets.php:79
 msgid "Tags: %T"
 msgstr "Mots-clés : %T"
 
-#: _widgets.php:88
+#: _widgets.php:87
 msgid "Attachments text (%T = text, %D = numeric):"
 msgstr "Texte pour le nombre d'annexes (%T = texte, %D = nombre) :"
 
-#: _widgets.php:89
+#: _widgets.php:88
 msgid "Attachments: %T"
 msgstr "Annexes : %T"
 
-#: _widgets.php:94
+#: _widgets.php:93
 msgid "Comments text (%T = text, %D = numeric):"
 msgstr "Texte pour le nombre de commentaires (%T = texte, %D = nombre) :"
 
-#: _widgets.php:95
+#: _widgets.php:94
 msgid "Comments: %T"
 msgstr "Commentaires : %T"
 
-#: _widgets.php:100
+#: _widgets.php:99
 msgid "Trackbacks text (%T = text, %D = numeric):"
 msgstr "Texte pour le nombre de rétroliens (%T = texte, %D = nombre) :"
 
-#: _widgets.php:101
+#: _widgets.php:100
 msgid "Trackbacks: %T"
 msgstr "Rétroliens : %T"
 
-#: _widgets.php:106
+#: _widgets.php:105
 msgid "Permalink text (%T = text link, %F = full link):"
 msgstr "Texte pour le lien pemanent (%T = texte, %F = complet) :"
 
-#: _widgets.php:107
-#: _widgets.php:119
-#: _widgets.php:125
-#: _widgets.php:131
-#: _widgets.php:137
+#: _widgets.php:106
+#: _widgets.php:118
+#: _widgets.php:124
+#: _widgets.php:130
+#: _widgets.php:136
 msgid "%T"
 msgstr "%T"
 
-#: _widgets.php:112
+#: _widgets.php:111
 msgid "Show comment feed url"
 msgstr "Afficher l'URL du flux des commentaires"
 
-#: _widgets.php:118
+#: _widgets.php:117
 msgid "Link to previous entry (%T = navigation text, %F = entry title):"
 msgstr "Lien vers le billet précédent (%T = texte de navigation, %F = titre du billet) :"
 
-#: _widgets.php:124
+#: _widgets.php:123
 msgid "Link to next entry (%T = navigation text, %F = entry title):"
 msgstr "Lien vers le billet suivant (%T = texte de navigation, %F = titre du billet) :"
 
-#: _widgets.php:130
+#: _widgets.php:129
 msgid "Link to previous entry of this category (%T = navigation text, %F = entry title):"
 msgstr "Lien vers le billet précédent de la catégorie (%T = texte de navigation, %F = titre du billet) :"
 
-#: _widgets.php:136
+#: _widgets.php:135
 msgid "Link to next entry of this category (%T = navigation text, %F = entry title):"
 msgstr "Lien vers le billet suivant de la catégorie (%T = texte de navigation, %F = titre du billet) :"
 
-#: _widgets.php:142
-msgid "Try to adapt style:"
-msgstr "Essayer d'adapter le style :"
-
-#: _widgets.php:146
+#: _widgets.php:145
 msgid "No style"
 msgstr "sans style"
 
-#: _widgets.php:147
+#: _widgets.php:146
 msgid "Small icon"
 msgstr "petite icône"
 
-#: _widgets.php:148
+#: _widgets.php:147
 msgid "Normal icon"
 msgstr "icône normale"
 
-#: _widgets.php:153
+#: _widgets.php:154
 msgid "Try to remove entry information"
 msgstr "Essayer de cacher les informations du billet"
 
-#: _widgets.php:159
+#: _widgets.php:160
 msgid "Try to remove entry tags"
 msgstr "Essayer de cacher la liste des mots-clés du billet"
 
-#: _widgets.php:165
+#: _widgets.php:166
 msgid "Try to remove entry navigation"
 msgstr "Essayer de cacher les liens de navigation"
 
-#: _widgets.php:333
+#: _widgets.php:321
 msgid "no attachment"
 msgstr "aucune annexe"
 
-#: _widgets.php:344
-msgid "one attachment"
-msgstr "une annexe"
-
-#: _widgets.php:356
-msgid "%d attachments"
-msgstr "%d annexes"
-
-#: _widgets.php:375
+#: _widgets.php:361
 msgid "no comment"
 msgstr "aucun commentaire"
 
-#: _widgets.php:386
-msgid "one comment"
-msgstr "un commentaire"
-
-#: _widgets.php:398
-msgid "%d comments"
-msgstr "%d commentaires"
-
-#: _widgets.php:417
+#: _widgets.php:401
 msgid "no trackback"
 msgstr "aucun rétrolien"
 
-#: _widgets.php:428
-msgid "one trackback"
-msgstr "un rétrolien"
-
-#: _widgets.php:440
-msgid "%d trackbacks"
-msgstr "%d rétroliens"
-
-#: _widgets.php:494
+#: _widgets.php:477
 msgid "Previous entry"
 msgstr "Billet précédent"
 
-#: _widgets.php:510
+#: _widgets.php:493
 msgid "Next entry"
 msgstr "Billet suivant"
 
-#: _widgets.php:527
+#: _widgets.php:510
 msgid "Previous entry of this category"
 msgstr "Billet précédent de cette catégorie"
 
-#: _widgets.php:544
+#: _widgets.php:527
 msgid "Next entry of this category"
 msgstr "Billet suivant de cette catégorie"
+
+msgid "Try to adapt style:"
+msgstr "Essayer d'adapter le style :"
+

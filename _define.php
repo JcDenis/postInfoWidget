@@ -3,7 +3,7 @@
 #
 # This file is part of postInfoWidget, a plugin for Dotclear 2.
 # 
-# Copyright (c) 2009-2015 Jean-Christian Denis and contributors
+# Copyright (c) 2009-2021 Jean-Christian Denis and contributors
 # 
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
@@ -12,24 +12,20 @@
 # -- END LICENSE BLOCK ------------------------------------
 
 if (!defined('DC_RC_PATH')) {
-
-	return null;
+    return null;
 }
 
 $this->registerModule(
-	/* Name */
-	"postInfoWidget",
-	/* Description*/
-	"Show Entry informations on a widget",
-	/* Author */
-	"Jean-Christian Denis, Pierre Van Glabeke",
-	/* Version */
-	'0.5.1',
-	array(
-		'permissions' => 'usage,contentadmin',
-		'type' => 'plugin',
-		'dc_min' => '2.7',
-		'support' => 'http://forum.dotclear.org/viewtopic.php?pid=332974#p332974',
-		'details' => 'http://plugins.dotaddict.org/dc2/details/postInfoWidget'
-	)
+    'postInfoWidget',
+    'Show Entry informations on a widget',
+    'Jean-Christian Denis, Pierre Van Glabeke',
+    '0.6',
+    [
+        'permissions' => 'usage,contentadmin',
+        'type' => 'plugin',
+        'dc_min' => '2.19',
+        'support' => 'http://forum.dotclear.org/viewtopic.php?pid=332974#p332974',
+        'details' => 'http://plugins.dotaddict.org/dc2/details/postInfoWidget',
+        'repository' => 'https://raw.githubusercontent.com/JcDenis/postInfoWidget/master/dcstore.xml'
+    ]
 );

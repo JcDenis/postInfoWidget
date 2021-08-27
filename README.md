@@ -20,3 +20,14 @@ First install postInfoWidget, manualy from a zip package or from
 Dotaddict repository. (See Dotclear's documentation to know how do this)
 
 Add and configure "Entry information list" from widgets manager.
+
+## MORE
+
+ * License : GNU GPL v2
+ * Source & contribution : [GitHub Page](https://github.com/JcDenis/postInfoWidget)
+ * Packages & details:  [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/postInfoWidget)
+
+## CONTRIBUTORS
+
+ * Jean-Chirstian Denis
+ * Pierre Van Glabeke
