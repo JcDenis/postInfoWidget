@@ -138,4 +138,3 @@ $GLOBALS['__l10n']['Previous entry of this category'] = 'Billet précédent de c
 $GLOBALS['__l10n']['Next entry of this category'] = 'Billet suivant de cette catégorie';
 
 $GLOBALS['__l10n']['Try to adapt style:'] = 'Essayer d\'adapter le style :';
-
