@@ -19,7 +19,7 @@ $this->registerModule(
     'postInfoWidget',
     'Show Entry informations on a widget',
     'Jean-Christian Denis, Pierre Van Glabeke',
-    '0.6',
+    '0.6.1',
     [
         'permissions' => 'usage,contentadmin',
         'type' => 'plugin',
