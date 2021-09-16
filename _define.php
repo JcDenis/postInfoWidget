@@ -16,10 +16,10 @@ if (!defined('DC_RC_PATH')) {
 }
 
 $this->registerModule(
-    'postInfoWidget',
+    'Entry information list',
     'Show Entry informations on a widget',
     'Jean-Christian Denis, Pierre Van Glabeke',
-    '0.6.1',
+    '0.7',
     [
         'requires' => [['core', '2.19']],
         'permissions' => 'usage,contentadmin',

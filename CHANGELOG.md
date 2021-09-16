@@ -1,3 +1,6 @@
+0.7 - 2021.09.17
+- clean up and cosmetics
+
 0.6 - 2021.08.27
 - cleanup (PSR2, short array, ...)
 - update license
