@@ -37,7 +37,7 @@ Add and configure "Entry information list" from widgets manager.
 
 ## CONTRIBUTORS
 
- * Jean-Chirstian Denis
+ * Jean-Christian Denis
  * Pierre Van Glabeke
 
  You are welcome to contribute to this code.
