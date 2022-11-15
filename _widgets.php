@@ -1,21 +1,20 @@
 <?php
 /**
  * @brief postInfoWidget, a plugin for Dotclear 2
- * 
+ *
  * @package Dotclear
  * @subpackage Plugin
- * 
+ *
  * @author Jean-Christian Denis, Pierre Van Glabeke
- * 
+ *
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 if (!defined('DC_RC_PATH')) {
     return null;
 }
 
-$core->addBehavior(
+dcCore::app()->addBehavior(
     'initWidgets',
     ['postInfoWidget', 'adminWidget']
 );
@@ -24,8 +23,6 @@ class postInfoWidget
 {
     public static function adminWidget($w)
     {
-        global $core;
-
         $w
             ->create(
                 'postinfowidget',
@@ -72,7 +69,7 @@ class postInfoWidget
                 'text'
             );
 
-        if ($core->plugins->moduleExists('tags')) {
+        if (dcCore::app()->plugins->moduleExists('tags')) {
             $w->postinfowidget->setting(
                 'tag_str',
                 __('Tags text (%T = tags list):'),
@@ -141,35 +138,35 @@ class postInfoWidget
                 __('Try to adapt style'),
                 'small',
                 'combo',
-                array(
-                    __('No style') => '-',
-                    __('Small icon') => 'small',
-                    __('Normal icon') => 'normal'
-                )
+                [
+                    __('No style')    => '-',
+                    __('Small icon')  => 'small',
+                    __('Normal icon') => 'normal',
+                ]
             );
-/*
-        $w->postinfowidget
-            ->setting(
-                'rmvinfo',
-                __('Try to remove entry information'),
-                1,
-                'check'
-            )
-            ->setting(
-                'rmvtags',
-                __('Try to remove entry tags'),
-                1,
-                'check'
-            )
-            ->setting(
-                'rmvnav',
-                __('Try to remove entry navigation'),
-                1,
-                'check'
-            );
-//*/
+        /*
+                $w->postinfowidget
+                    ->setting(
+                        'rmvinfo',
+                        __('Try to remove entry information'),
+                        1,
+                        'check'
+                    )
+                    ->setting(
+                        'rmvtags',
+                        __('Try to remove entry tags'),
+                        1,
+                        'check'
+                    )
+                    ->setting(
+                        'rmvnav',
+                        __('Try to remove entry navigation'),
+                        1,
+                        'check'
+                    );
+        //*/
         # --BEHAVIOR-- postInfoWidgetAdmin
-        $core->callBehavior('postInfoWidgetAdmin', $w);
+        dcCore::app()->callBehavior('postInfoWidgetAdmin', $w);
 
         $w->postinfowidget
             ->addContentOnly()
@@ -179,18 +176,16 @@ class postInfoWidget
 
     public static function publicWidget($w)
     {
-        global $core, $_ctx;
-
         if ($w->offline) {
             return null;
         }
 
-        if ($core->url->type != 'post' 
-        || !$_ctx->posts->post_id){
+        if (dcCore::app()->url->type != 'post'
+        || !dcCore::app()->ctx->posts->post_id) {
             return null;
         }
 
-        $link = '<a href="%s">%s</a>';
+        $link    = '<a href="%s">%s</a>';
         $content = '';
 
         if ($w->dt_str != '') {
@@ -199,8 +194,8 @@ class postInfoWidget
                 'date',
                 dt::str(
                     $w->dt_str,
-                    strtotime($_ctx->posts->post_dt),
-                    $core->blog->settings->system->blog_timezone
+                    strtotime(dcCore::app()->ctx->posts->post_dt),
+                    dcCore::app()->blog->settings->system->blog_timezone
                 )
             );
         }
@@ -211,8 +206,8 @@ class postInfoWidget
                 'create',
                 dt::str(
                     $w->creadt_str,
-                    strtotime($_ctx->posts->post_creadt),
-                    $core->blog->settings->system->blog_timezone
+                    strtotime(dcCore::app()->ctx->posts->post_creadt),
+                    dcCore::app()->blog->settings->system->blog_timezone
                 )
             );
         }
@@ -223,28 +218,26 @@ class postInfoWidget
                 'update',
                 dt::str(
                     $w->upddt_str,
-                    strtotime($_ctx->posts->post_upddt),
-                    $core->blog->settings->system->blog_timezone
+                    strtotime(dcCore::app()->ctx->posts->post_upddt),
+                    dcCore::app()->blog->settings->system->blog_timezone
                 )
             );
         }
 
         if ($w->lang_str != '') {
-            $ln = l10n::getISOcodes();
-            $lang_code = $_ctx->posts->post_lang ? 
-                $_ctx->posts->post_lang : 
-                $core->blog->settings->system->lang;
-            $lang_name = isset($ln[$lang_code]) ? 
-                $ln[$lang_code] : 
-                $lang_code;
+            $ln        = l10n::getISOcodes();
+            $lang_code = dcCore::app()->ctx->posts->post_lang ?
+                dcCore::app()->ctx->posts->post_lang :
+                dcCore::app()->blog->settings->system->lang;
+            $lang_name = $ln[$lang_code] ?? $lang_code;
             $lang_flag = file_exists(
-                    dirname(__FILE__) .
-                    '/img/flags/' .
-                    $lang_code . '.png'
-                ) ? 
-                '<img src="' . $core->blog->getQmarkURL() .
+                dirname(__FILE__) .
+                '/img/flags/' .
+                $lang_code . '.png'
+            ) ?
+                '<img src="' . dcCore::app()->blog->getQmarkURL() .
                     'pf=postInfoWidget/img/flags/' .
-                    $lang_code . '.png" alt="' . $lang_name . '" />' : 
+                    $lang_code . '.png" alt="' . $lang_name . '" />' :
                 '';
 
             $content .= postInfoWidget::li(
@@ -264,13 +257,13 @@ class postInfoWidget
                 'author',
                 str_replace(
                     '%T',
-                    $_ctx->posts->getAuthorLink(),
+                    dcCore::app()->ctx->posts->getAuthorLink(),
                     html::escapeHTML($w->author_str)
                 )
             );
         }
 
-        if ($w->category_str != '' && $_ctx->posts->cat_id) {
+        if ($w->category_str != '' && dcCore::app()->ctx->posts->cat_id) {
             $content .= postInfoWidget::li(
                 $w,
                 'category',
@@ -278,25 +271,25 @@ class postInfoWidget
                     '%T',
                     sprintf(
                         $link,
-                        $_ctx->posts->getCategoryURL(),
-                        html::escapeHTML($_ctx->posts->cat_title)
+                        dcCore::app()->ctx->posts->getCategoryURL(),
+                        html::escapeHTML(dcCore::app()->ctx->posts->cat_title)
                     ),
                     html::escapeHTML($w->category_str)
                 )
             );
         }
 
-        if ($w->tag_str != '' && $core->plugins->moduleExists('tags')) {
-            $meta = $core->meta->getMetadata([
+        if ($w->tag_str != '' && dcCore::app()->plugins->moduleExists('tags')) {
+            $meta = dcCore::app()->meta->getMetadata([
                 'meta_type' => 'tag',
-                'post_id' => $_ctx->posts->post_id
+                'post_id'   => dcCore::app()->ctx->posts->post_id,
             ]);
             $metas = [];
             while ($meta->fetch()) {
                 $metas[$meta->meta_id] = sprintf(
                     $link,
-                    $core->blog->url .
-                        $core->url->getBase('tag') . "/" .
+                    dcCore::app()->blog->url .
+                        dcCore::app()->url->getBase('tag') . '/' .
                         rawurlencode($meta->meta_id),
                     $meta->meta_id
                 );
@@ -315,7 +308,7 @@ class postInfoWidget
         }
 
         if ($w->attachment_str != '') {
-            $nb = $_ctx->posts->countMedia();
+            $nb = dcCore::app()->ctx->posts->countMedia();
             if ($nb == 0) {
                 $attachment_numeric = 0;
                 $attachment_textual = __('no attachment');
@@ -354,8 +347,8 @@ class postInfoWidget
             );
         }
 
-        if ($w->comment_str != '' && $_ctx->posts->commentsActive()) {
-            $nb = $_ctx->posts->nb_comment;
+        if ($w->comment_str != '' && dcCore::app()->ctx->posts->commentsActive()) {
+            $nb = dcCore::app()->ctx->posts->nb_comment;
             if ($nb == 0) {
                 $comment_numeric = 0;
                 $comment_textual = __('no comment');
@@ -394,8 +387,8 @@ class postInfoWidget
             );
         }
 
-        if ($w->trackback_str != '' && $_ctx->posts->trackbacksActive()) {
-            $nb = $_ctx->posts->nb_trackback;
+        if ($w->trackback_str != '' && dcCore::app()->ctx->posts->trackbacksActive()) {
+            $nb = dcCore::app()->ctx->posts->nb_trackback;
             if ($nb == 0) {
                 $trackback_numeric = 0;
                 $trackback_textual = __('no trackback');
@@ -428,7 +421,7 @@ class postInfoWidget
                 'trackback',
                 str_replace(
                     ['%T', '%D'],
-                    array($trackback_textual, $trackback_numeric),
+                    [$trackback_textual, $trackback_numeric],
                     html::escapeHTML($w->trackback_str)
                 )
             );
@@ -443,26 +436,26 @@ class postInfoWidget
                     [
                         sprintf(
                             $link,
-                            $_ctx->posts->getURL(),
+                            dcCore::app()->ctx->posts->getURL(),
                             __('Permalink')
                         ),
-                        $_ctx->posts->getURL()
+                        dcCore::app()->ctx->posts->getURL(),
                     ],
                     html::escapeHTML($w->permalink_str)
                 )
             );
         }
 
-        if ($w->feed && $_ctx->posts->commentsActive()) {
+        if ($w->feed && dcCore::app()->ctx->posts->commentsActive()) {
             $content .= postInfoWidget::li(
                 $w,
                 'feed',
                 sprintf(
                     $link,
-                    $core->blog->url .
-                        $core->url->getBase('feed') .
+                    dcCore::app()->blog->url .
+                        dcCore::app()->url->getBase('feed') .
                         '/atom/comments/' .
-                        $_ctx->posts->post_id,
+                        dcCore::app()->ctx->posts->post_id,
                     __("This post's comments feed"),
                     html::escapeHTML($w->tag_str)
                 )
@@ -471,7 +464,7 @@ class postInfoWidget
 
         if ($w->navprevpost) {
             $npp = postInfoWidget::nav(
-                $_ctx->posts,
+                dcCore::app()->ctx->posts,
                 -1,
                 false,
                 __('Previous entry'),
@@ -487,7 +480,7 @@ class postInfoWidget
         }
         if ($w->navnextpost) {
             $nnp = postInfoWidget::nav(
-                $_ctx->posts,
+                dcCore::app()->ctx->posts,
                 1,
                 false,
                 __('Next entry'),
@@ -504,7 +497,7 @@ class postInfoWidget
 
         if ($w->navprevcat) {
             $npc = postInfoWidget::nav(
-                $_ctx->posts,
+                dcCore::app()->ctx->posts,
                 -1,
                 true,
                 __('Previous entry of this category'),
@@ -521,7 +514,7 @@ class postInfoWidget
 
         if ($w->navnextcat) {
             $nnc = postInfoWidget::nav(
-                $_ctx->posts,
+                dcCore::app()->ctx->posts,
                 1,
                 true,
                 __('Next entry of this category'),
@@ -537,56 +530,54 @@ class postInfoWidget
         }
 
         # --BEHAVIOR-- postInfoWidgetPublic
-        $content .= $core->callBehavior('postInfoWidgetPublic', $w);
+        $content .= dcCore::app()->callBehavior('postInfoWidgetPublic', $w);
 
         if (empty($content)) {
             return null;
         }
-/*
-        $rmv = '';
-        if ($w->rmvinfo || $w->rmvtags || $w->rmvnav) {
-            $rmv .= 
-            '<script type="text/javascript">'."\n".
-            '$(function() {'."\n";
-            if ($w->rmvinfo) {
-                $rmv .= 
-                'var piw_pi=$("#content .post-info");'."\n".
-                'if ($(piw_pi).length!=0){$(piw_pi).hide();}'."\n";
-            }
-            if ($w->rmvtags) {
-                $rmv .= 
-                'var piw_pt=$("#content .post-tags");'."\n".
-                'if ($(piw_pt).length!=0){$(piw_pt).hide();}'."\n";
-            }
-            if ($w->rmvnav) {
-                $rmv .= 
-                'var piw_pn=$("#content #navlinks");'."\n".
-                'if ($(piw_pn).length!=0){$(piw_pn).hide();}'."\n";
-            }
-            $rmv .= 
-            '});'."\n".
-            "</script>\n";
-        }
-//*/
+        /*
+                $rmv = '';
+                if ($w->rmvinfo || $w->rmvtags || $w->rmvnav) {
+                    $rmv .=
+                    '<script type="text/javascript">'."\n".
+                    '$(function() {'."\n";
+                    if ($w->rmvinfo) {
+                        $rmv .=
+                        'var piw_pi=$("#content .post-info");'."\n".
+                        'if ($(piw_pi).length!=0){$(piw_pi).hide();}'."\n";
+                    }
+                    if ($w->rmvtags) {
+                        $rmv .=
+                        'var piw_pt=$("#content .post-tags");'."\n".
+                        'if ($(piw_pt).length!=0){$(piw_pt).hide();}'."\n";
+                    }
+                    if ($w->rmvnav) {
+                        $rmv .=
+                        'var piw_pn=$("#content #navlinks");'."\n".
+                        'if ($(piw_pn).length!=0){$(piw_pn).hide();}'."\n";
+                    }
+                    $rmv .=
+                    '});'."\n".
+                    "</script>\n";
+                }
+        //*/
         return $w->renderDiv(
             $w->content_only,
             'postinfowidget ' . $w->class,
             '',
-            ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '').
+            ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '') .
                 sprintf('<ul>%s</ul>', $content)
         );
     }
 
     public static function li($w, $i, $c)
     {
-        global $core;
-
         $s = ' style="padding-left:%spx;background: transparent url(\'' .
-            $core->blog->getQmarkURL() .
+            dcCore::app()->blog->getQmarkURL() .
             'pf=postInfoWidget/img/%s%s.png\') no-repeat left center;"';
         if ($w->style == 'small') {
             $s = sprintf($s, 16, $i, '-small');
-        } elseif($w->style == 'normal') {
+        } elseif ($w->style == 'normal') {
             $s = sprintf($s, 20, $i, '');
         } else {
             $s = '';
@@ -598,9 +589,7 @@ class postInfoWidget
 
     public static function nav($p, $d, $r, $t, $c)
     {
-        global $core;
-
-        $rs = $core->blog->getNextPost($p, $d, $r);
+        $rs = dcCore::app()->blog->getNextPost($p, $d, $r);
         if (is_null($rs)) {
             return '';
         }
