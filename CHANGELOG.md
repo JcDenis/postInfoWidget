@@ -1,3 +1,6 @@
+0.8 - 2022.11.20
+- fix compatibility with Dotclear 2.24 (required)
+
 0.7 - 2021.09.17
 - clean up and cosmetics
 
