@@ -18,9 +18,9 @@ $this->registerModule(
     'Entry information list',
     'Show Entry informations on a widget',
     'Jean-Christian Denis, Pierre Van Glabeke',
-    '0.8',
+    '0.9',
     [
-        'requires'    => [['core', '2.24']],
+        'requires'    => [['core', '2.25']],
         'permissions' => dcCore::app()->auth->makePermissions([
             dcAuth::PERMISSION_USAGE,
             dcAuth::PERMISSION_CONTENT_ADMIN,

@@ -1,3 +1,7 @@
+0.9 - 2023.03.21
+- require Dotclear 2.25
+- use namespace
+
 0.8 - 2022.11.20
 - fix compatibility with Dotclear 2.24 (required)
 

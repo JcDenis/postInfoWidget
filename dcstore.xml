@@ -2,11 +2,11 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="postInfoWidget">
     <name>Entry information list</name>
-    <version>0.8</version>
+    <version>0.9</version>
     <author>Jean-Christian Denis, Pierre Van Glabeke</author>
     <desc>Show Entry informations on a widget</desc>
-    <file>https://github.com/JcDenis/postInfoWidget/releases/download/v0.8/plugin-postInfoWidget.zip</file>
-    <da:dcmin>2.24</da:dcmin>
+    <file>https://github.com/JcDenis/postInfoWidget/releases/download/v0.9/plugin-postInfoWidget.zip</file>
+    <da:dcmin>2.25</da:dcmin>
     <da:details>http://plugins.dotaddict.org/dc2/details/postInfoWidget</da:details>
     <da:support>http://forum.dotclear.org/viewtopic.php?pid=332974#p332974</da:support>
   </module>
