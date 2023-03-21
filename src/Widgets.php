@@ -10,24 +10,27 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return null;
-}
+declare(strict_types=1);
 
-dcCore::app()->addBehavior(
-    'initWidgets',
-    ['postInfoWidget', 'adminWidget']
-);
+namespace Dotclear\Plugin\postInfoWidget;
 
-class postInfoWidget
+use dcCore;
+use dcRecord;
+use Dotclear\Plugin\widgets\WidgetsStack;
+use Dotclear\Plugin\widgets\WidgetsElement;
+use dt;
+use html;
+use l10n;
+
+class Widgets
 {
-    public static function adminWidget($w)
+    public static function initWidgets(WidgetsStack $w): void
     {
         $w
             ->create(
                 'postinfowidget',
                 __('PostInfoWidget: entry information list'),
-                ['postInfoWidget', 'publicWidget'],
+                [self::class, 'publicWidget'],
                 null,
                 __('Show Entry informations on a widget')
             )
@@ -174,64 +177,64 @@ class postInfoWidget
             ->addOffline();
     }
 
-    public static function publicWidget($w)
+    public static function publicWidget(WidgetsElement $w): string
     {
         if ($w->offline) {
-            return null;
+            return '';
         }
 
         if (dcCore::app()->url->type != 'post'
-        || !dcCore::app()->ctx->posts->post_id) {
-            return null;
+        || !dcCore::app()->ctx->posts->f('post_id')) {
+            return '';
         }
 
         $link    = '<a href="%s">%s</a>';
         $content = '';
 
         if ($w->dt_str != '') {
-            $content .= postInfoWidget::li(
+            $content .= self::li(
                 $w,
                 'date',
                 dt::str(
                     $w->dt_str,
-                    strtotime(dcCore::app()->ctx->posts->post_dt),
-                    dcCore::app()->blog->settings->system->blog_timezone
+                    (int) strtotime(dcCore::app()->ctx->posts->f('post_dt')),
+                    dcCore::app()->blog->settings->get('system')->get('blog_timezone')
                 )
             );
         }
 
         if ($w->creadt_str != '') {
-            $content .= postInfoWidget::li(
+            $content .= self::li(
                 $w,
                 'create',
                 dt::str(
                     $w->creadt_str,
-                    strtotime(dcCore::app()->ctx->posts->post_creadt),
-                    dcCore::app()->blog->settings->system->blog_timezone
+                    (int) strtotime(dcCore::app()->ctx->posts->post_creadt),
+                    dcCore::app()->blog->settings->get('system')->get('blog_timezone')
                 )
             );
         }
 
         if ($w->upddt_str != '') {
-            $content .= postInfoWidget::li(
+            $content .= self::li(
                 $w,
                 'update',
                 dt::str(
                     $w->upddt_str,
-                    strtotime(dcCore::app()->ctx->posts->post_upddt),
-                    dcCore::app()->blog->settings->system->blog_timezone
+                    (int) strtotime(dcCore::app()->ctx->posts->f('post_upddt')),
+                    dcCore::app()->blog->settings->get('system')->get('blog_timezone')
                 )
             );
         }
 
         if ($w->lang_str != '') {
             $ln        = l10n::getISOcodes();
-            $lang_code = dcCore::app()->ctx->posts->post_lang ?
-                dcCore::app()->ctx->posts->post_lang :
-                dcCore::app()->blog->settings->system->lang;
+            $lang_code = dcCore::app()->ctx->posts->f('post_lang') ?
+                dcCore::app()->ctx->posts->f('post_lang') :
+                dcCore::app()->blog->settings->get('system')->get('lang');
             $lang_name = $ln[$lang_code] ?? $lang_code;
             $lang_flag = file_exists(
-                dirname(__FILE__) .
+                dirname(__DIR__) .
                 '/img/flags/' .
                 $lang_code . '.png'
             ) ?
@@ -240,7 +243,7 @@ class postInfoWidget
                     $lang_code . '.png" alt="' . $lang_name . '" />' :
                 '';
 
-            $content .= postInfoWidget::li(
+            $content .= self::li(
                 $w,
                 'lang',
                 str_replace(
@@ -252,7 +255,7 @@ class postInfoWidget
         }
 
         if ($w->author_str != '') {
-            $content .= postInfoWidget::li(
+            $content .= self::li(
                 $w,
                 'author',
                 str_replace(
@@ -263,8 +266,8 @@ class postInfoWidget
             );
         }
 
-        if ($w->category_str != '' && dcCore::app()->ctx->posts->cat_id) {
-            $content .= postInfoWidget::li(
+        if ($w->category_str != '' && dcCore::app()->ctx->posts->f('cat_id')) {
+            $content .= self::li(
                 $w,
                 'category',
                 str_replace(
@@ -272,7 +275,7 @@ class postInfoWidget
                     sprintf(
                         $link,
                         dcCore::app()->ctx->posts->getCategoryURL(),
-                        html::escapeHTML(dcCore::app()->ctx->posts->cat_title)
+                        html::escapeHTML(dcCore::app()->ctx->posts->f('cat_title'))
                     ),
                     html::escapeHTML($w->category_str)
                 )
@@ -282,20 +285,20 @@ class postInfoWidget
         if ($w->tag_str != '' && dcCore::app()->plugins->moduleExists('tags')) {
             $meta = dcCore::app()->meta->getMetadata([
                 'meta_type' => 'tag',
-                'post_id'   => dcCore::app()->ctx->posts->post_id,
+                'post_id'   => dcCore::app()->ctx->posts->f('post_id'),
             ]);
             $metas = [];
             while ($meta->fetch()) {
-                $metas[$meta->meta_id] = sprintf(
+                $metas[$meta->f('meta_id')] = sprintf(
                     $link,
                     dcCore::app()->blog->url .
                         dcCore::app()->url->getBase('tag') . '/' .
-                        rawurlencode($meta->meta_id),
-                    $meta->meta_id
+                        rawurlencode($meta->f('meta_id')),
+                    $meta->f('meta_id')
                 );
             }
             if (!empty($metas)) {
-                $content .= postInfoWidget::li(
+                $content .= self::li(
                     $w,
                     'tag',
                     str_replace(
@@ -336,7 +339,7 @@ class postInfoWidget
                 );
             }
 
-            $content .= postInfoWidget::li(
+            $content .= self::li(
                 $w,
                 'attachment',
                 str_replace(
@@ -348,7 +351,7 @@ class postInfoWidget
         }
 
         if ($w->comment_str != '' && dcCore::app()->ctx->posts->commentsActive()) {
-            $nb = dcCore::app()->ctx->posts->nb_comment;
+            $nb = (int) dcCore::app()->ctx->posts->f('nb_comment');
             if ($nb == 0) {
                 $comment_numeric = 0;
                 $comment_textual = __('no comment');
@@ -376,7 +379,7 @@ class postInfoWidget
                 );
             }
 
-            $content .= postInfoWidget::li(
+            $content .= self::li(
                 $w,
                 'comment',
                 str_replace(
@@ -388,7 +391,7 @@ class postInfoWidget
         }
 
         if ($w->trackback_str != '' && dcCore::app()->ctx->posts->trackbacksActive()) {
-            $nb = dcCore::app()->ctx->posts->nb_trackback;
+            $nb = (int) dcCore::app()->ctx->posts->f('nb_trackback');
             if ($nb == 0) {
                 $trackback_numeric = 0;
                 $trackback_textual = __('no trackback');
@@ -416,7 +419,7 @@ class postInfoWidget
                 );
             }
 
-            $content .= postInfoWidget::li(
+            $content .= self::li(
                 $w,
                 'trackback',
                 str_replace(
@@ -428,7 +431,7 @@ class postInfoWidget
         }
 
         if ($w->permalink_str) {
-            $content .= postInfoWidget::li(
+            $content .= self::li(
                 $w,
                 'permalink',
                 str_replace(
@@ -447,7 +450,7 @@ class postInfoWidget
         }
 
         if ($w->feed && dcCore::app()->ctx->posts->commentsActive()) {
-            $content .= postInfoWidget::li(
+            $content .= self::li(
                 $w,
                 'feed',
                 sprintf(
@@ -455,15 +458,14 @@ class postInfoWidget
                     dcCore::app()->blog->url .
                         dcCore::app()->url->getBase('feed') .
                         '/atom/comments/' .
-                        dcCore::app()->ctx->posts->post_id,
-                    __("This post's comments feed"),
-                    html::escapeHTML($w->tag_str)
+                        dcCore::app()->ctx->posts->f('post_id'),
+                    __("This post's comments feed")
                 )
             );
         }
 
         if ($w->navprevpost) {
-            $npp = postInfoWidget::nav(
+            $npp = self::nav(
                 dcCore::app()->ctx->posts,
                 -1,
                 false,
@@ -471,7 +473,7 @@ class postInfoWidget
                 $w->navprevpost
             );
             if ($npp) {
-                $content .= postInfoWidget::li(
+                $content .= self::li(
                     $w,
                     'previous',
                     $npp
@@ -479,7 +481,7 @@ class postInfoWidget
             }
         }
         if ($w->navnextpost) {
-            $nnp = postInfoWidget::nav(
+            $nnp = self::nav(
                 dcCore::app()->ctx->posts,
                 1,
                 false,
@@ -487,7 +489,7 @@ class postInfoWidget
                 $w->navnextpost
             );
             if ($nnp) {
-                $content .= postInfoWidget::li(
+                $content .= self::li(
                     $w,
                     'next',
                     $nnp
@@ -496,7 +498,7 @@ class postInfoWidget
         }
 
         if ($w->navprevcat) {
-            $npc = postInfoWidget::nav(
+            $npc = self::nav(
                 dcCore::app()->ctx->posts,
                 -1,
                 true,
@@ -504,7 +506,7 @@ class postInfoWidget
                 $w->navprevcat
             );
             if ($npc) {
-                $content .= postInfoWidget::li(
+                $content .= self::li(
                     $w,
                     'previous',
                     $npc
@@ -513,7 +515,7 @@ class postInfoWidget
         }
 
         if ($w->navnextcat) {
-            $nnc = postInfoWidget::nav(
+            $nnc = self::nav(
                 dcCore::app()->ctx->posts,
                 1,
                 true,
@@ -521,7 +523,7 @@ class postInfoWidget
                 $w->navnextcat
             );
             if ($nnc) {
-                $content .= postInfoWidget::li(
+                $content .= self::li(
                     $w,
                     'next',
                     $nnc
@@ -533,7 +535,7 @@ class postInfoWidget
         $content .= dcCore::app()->callBehavior('postInfoWidgetPublic', $w);
 
         if (empty($content)) {
-            return null;
+            return '';
         }
         /*
                 $rmv = '';
@@ -562,7 +564,7 @@ class postInfoWidget
                 }
         //*/
         return $w->renderDiv(
-            $w->content_only,
+            (bool) $w->content_only,
             'postinfowidget ' . $w->class,
             '',
             ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '') .
@@ -570,7 +572,7 @@ class postInfoWidget
         );
     }
 
-    public static function li($w, $i, $c)
+    public static function li(WidgetsElement $w, string $i, string $c): string
     {
         $s = ' style="padding-left:%spx;background: transparent url(\'' .
             dcCore::app()->blog->getQmarkURL() .
@@ -587,7 +589,7 @@ class postInfoWidget
         return sprintf($l, $i, $s, $c);
     }
 
-    public static function nav($p, $d, $r, $t, $c)
+    public static function nav(dcRecord $p, int $d, bool $r, string $t, string $c): string
     {
         $rs = dcCore::app()->blog->getNextPost($p, $d, $r);
         if (is_null($rs)) {
@@ -595,7 +597,7 @@ class postInfoWidget
         }
         $l = '<a href="%s" title="%s">%s</a>';
         $u = $rs->getURL();
-        $e = html::escapeHTML($rs->post_title);
+        $e = html::escapeHTML($rs->f('post_title'));
 
         return str_replace(
             ['%T', '%F'],
