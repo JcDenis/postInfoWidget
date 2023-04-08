@@ -16,10 +16,10 @@ namespace Dotclear\Plugin\postInfoWidget;
 
 use dcCore;
 use dcRecord;
+use Dotclear\Helper\Html\Html;
 use Dotclear\Plugin\widgets\WidgetsStack;
 use Dotclear\Plugin\widgets\WidgetsElement;
 use dt;
-use html;
 use l10n;
 
 class Widgets
@@ -249,7 +249,7 @@ class Widgets
                 str_replace(
                     ['%T', '%C', '%F'],
                     [$lang_name, $lang_code, $lang_flag],
-                    html::escapeHTML($w->lang_str)
+                    Html::escapeHTML($w->lang_str)
                 )
             );
         }
@@ -261,7 +261,7 @@ class Widgets
                 str_replace(
                     '%T',
                     dcCore::app()->ctx->posts->getAuthorLink(),
-                    html::escapeHTML($w->author_str)
+                    Html::escapeHTML($w->author_str)
                 )
             );
         }
@@ -275,9 +275,9 @@ class Widgets
                     sprintf(
                         $link,
                         dcCore::app()->ctx->posts->getCategoryURL(),
-                        html::escapeHTML(dcCore::app()->ctx->posts->f('cat_title'))
+                        Html::escapeHTML(dcCore::app()->ctx->posts->f('cat_title'))
                     ),
-                    html::escapeHTML($w->category_str)
+                    Html::escapeHTML($w->category_str)
                 )
             );
         }
@@ -304,7 +304,7 @@ class Widgets
                     str_replace(
                         '%T',
                         implode(', ', $metas),
-                        html::escapeHTML($w->tag_str)
+                        Html::escapeHTML($w->tag_str)
                     )
                 );
             }
@@ -345,7 +345,7 @@ class Widgets
                 str_replace(
                     ['%T', '%D'],
                     [$attachment_textual, $attachment_numeric],
-                    html::escapeHTML($w->attachment_str)
+                    Html::escapeHTML($w->attachment_str)
                 )
             );
         }
@@ -385,7 +385,7 @@ class Widgets
                 str_replace(
                     ['%T', '%D'],
                     [$comment_textual, $comment_numeric],
-                    html::escapeHTML($w->comment_str)
+                    Html::escapeHTML($w->comment_str)
                 )
             );
         }
@@ -425,7 +425,7 @@ class Widgets
                 str_replace(
                     ['%T', '%D'],
                     [$trackback_textual, $trackback_numeric],
-                    html::escapeHTML($w->trackback_str)
+                    Html::escapeHTML($w->trackback_str)
                 )
             );
         }
@@ -444,7 +444,7 @@ class Widgets
                         ),
                         dcCore::app()->ctx->posts->getURL(),
                     ],
-                    html::escapeHTML($w->permalink_str)
+                    Html::escapeHTML($w->permalink_str)
                 )
             );
         }
@@ -567,7 +567,7 @@ class Widgets
             (bool) $w->content_only,
             'postinfowidget ' . $w->class,
             '',
-            ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '') .
+            ($w->title ? $w->renderTitle(Html::escapeHTML($w->title)) : '') .
                 sprintf('<ul>%s</ul>', $content)
         );
     }
@@ -597,7 +597,7 @@ class Widgets
         }
         $l = '<a href="%s" title="%s">%s</a>';
         $u = $rs->getURL();
-        $e = html::escapeHTML($rs->f('post_title'));
+        $e = Html::escapeHTML($rs->f('post_title'));
 
         return str_replace(
             ['%T', '%F'],
