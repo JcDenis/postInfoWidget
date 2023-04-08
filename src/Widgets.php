@@ -17,10 +17,10 @@ namespace Dotclear\Plugin\postInfoWidget;
 use dcCore;
 use dcRecord;
 use Dotclear\Helper\Html\Html;
+use Dotclear\Helper\L10n;
 use Dotclear\Plugin\widgets\WidgetsStack;
 use Dotclear\Plugin\widgets\WidgetsElement;
 use dt;
-use l10n;
 
 class Widgets
 {
@@ -228,7 +228,7 @@ class Widgets
         }
 
         if ($w->lang_str != '') {
-            $ln        = l10n::getISOcodes();
+            $ln        = L10n::getISOcodes();
             $lang_code = dcCore::app()->ctx->posts->f('post_lang') ?
                 dcCore::app()->ctx->posts->f('post_lang') :
                 dcCore::app()->blog->settings->get('system')->get('lang');
