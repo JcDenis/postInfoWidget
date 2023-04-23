@@ -16,11 +16,11 @@ namespace Dotclear\Plugin\postInfoWidget;
 
 use dcCore;
 use dcRecord;
+use Dotclear\Helper\Date;
 use Dotclear\Helper\Html\Html;
 use Dotclear\Helper\L10n;
 use Dotclear\Plugin\widgets\WidgetsStack;
 use Dotclear\Plugin\widgets\WidgetsElement;
-use dt;
 
 class Widgets
 {
@@ -195,7 +195,7 @@ class Widgets
             $content .= self::li(
                 $w,
                 'date',
-                dt::str(
+                Date::str(
                     $w->dt_str,
                     (int) strtotime(dcCore::app()->ctx->posts->f('post_dt')),
                     dcCore::app()->blog->settings->get('system')->get('blog_timezone')
@@ -207,7 +207,7 @@ class Widgets
             $content .= self::li(
                 $w,
                 'create',
-                dt::str(
+                Date::str(
                     $w->creadt_str,
                     (int) strtotime(dcCore::app()->ctx->posts->post_creadt),
                     dcCore::app()->blog->settings->get('system')->get('blog_timezone')
@@ -219,7 +219,7 @@ class Widgets
             $content .= self::li(
                 $w,
                 'update',
-                dt::str(
+                Date::str(
                     $w->upddt_str,
                     (int) strtotime(dcCore::app()->ctx->posts->f('post_upddt')),
                     dcCore::app()->blog->settings->get('system')->get('blog_timezone')
