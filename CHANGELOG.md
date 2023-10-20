@@ -1,3 +1,9 @@
+postInfoWidget 1.2 - 2023.10.20
+===========================================================
+* Require Dotclear 2.28
+* Require PHP 8.1
+* Upgrade to Dotclear 2.28
+
 postInfoWidget 1.1 - 2023.08.13
 ===========================================================
 * Require Dotclear 2.27

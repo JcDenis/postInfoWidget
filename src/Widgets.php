@@ -1,20 +1,10 @@
 <?php
-/**
- * @brief postInfoWidget, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis, Pierre Van Glabeke
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\postInfoWidget;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Database\MetaRecord;
 use Dotclear\Helper\{
     Date,
@@ -26,6 +16,13 @@ use Dotclear\Plugin\widgets\{
     WidgetsElement
 };
 
+/**
+ * @brief       postInfoWidget widgets class.
+ * @ingroup     postInfoWidget
+ *
+ * @author      Jean-Christian Denis
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Widgets
 {
     public static function initWidgets(WidgetsStack $w): void
@@ -33,8 +30,8 @@ class Widgets
         $w
             ->create(
                 'postinfowidget',
-                __('PostInfoWidget: entry information list'),
-                [self::class, 'publicWidget'],
+                __('Entry information list'),
+                self::publicWidget(...),
                 null,
                 __('Show Entry informations on a widget')
             )
@@ -76,7 +73,7 @@ class Widgets
                 'text'
             );
 
-        if (dcCore::app()->plugins->moduleExists('tags')) {
+        if (App::plugins()->moduleExists('tags')) {
             $w->__get('postinfowidget')->setting(
                 'tag_str',
                 __('Tags text (%T = tags list):'),
@@ -173,7 +170,7 @@ class Widgets
                     );
         //*/
         # --BEHAVIOR-- postInfoWidgetAdmin
-        dcCore::app()->callBehavior('postInfoWidgetAdmin', $w);
+        App::behavior()->callBehavior('postInfoWidgetAdmin', $w);
 
         $w->__get('postinfowidget')
             ->addContentOnly()
@@ -183,14 +180,10 @@ class Widgets
 
     public static function publicWidget(WidgetsElement $w): string
     {
-        // nullsafe
-        if (is_null(dcCore::app()->blog) || is_null(dcCore::app()->ctx)) {
-            return '';
-        }
-
-        if ($w->__get('offline')
-            || dcCore::app()->url->type != 'post'
-            || !dcCore::app()->ctx->__get('posts')->f('post_id')
+        if (!App::blog()->isDefined()
+            || $w->__get('offline')
+            || App::url()->type != 'post'
+            || !App::frontend()->context()->__get('posts')->f('post_id')
         ) {
             return '';
         }
@@ -204,8 +197,8 @@ class Widgets
                 'date',
                 Date::str(
                     $w->__get('dt_str'),
-                    (int) strtotime(dcCore::app()->ctx->__get('posts')->f('post_dt')),
-                    dcCore::app()->blog->settings->get('system')->get('blog_timezone')
+                    (int) strtotime(App::frontend()->context()->__get('posts')->f('post_dt')),
+                    App::blog()->settings()->get('system')->get('blog_timezone')
                 )
             );
         }
@@ -216,8 +209,8 @@ class Widgets
                 'create',
                 Date::str(
                     $w->__get('creadt_str'),
-                    (int) strtotime(dcCore::app()->ctx->__get('posts')->post_creadt),
-                    dcCore::app()->blog->settings->get('system')->get('blog_timezone')
+                    (int) strtotime(App::frontend()->context()->__get('posts')->post_creadt),
+                    App::blog()->settings()->get('system')->get('blog_timezone')
                 )
             );
         }
@@ -228,24 +221,24 @@ class Widgets
                 'update',
                 Date::str(
                     $w->__get('upddt_str'),
-                    (int) strtotime(dcCore::app()->ctx->__get('posts')->f('post_upddt')),
-                    dcCore::app()->blog->settings->get('system')->get('blog_timezone')
+                    (int) strtotime(App::frontend()->context()->__get('posts')->f('post_upddt')),
+                    App::blog()->settings()->get('system')->get('blog_timezone')
                 )
             );
         }
 
         if ($w->__get('lang_str') != '') {
             $ln        = L10n::getISOcodes();
-            $lang_code = dcCore::app()->ctx->__get('posts')->f('post_lang') ?
-                dcCore::app()->ctx->__get('posts')->f('post_lang') :
-                dcCore::app()->blog->settings->get('system')->get('lang');
+            $lang_code = App::frontend()->context()->__get('posts')->f('post_lang') ?
+                App::frontend()->context()->__get('posts')->f('post_lang') :
+                App::blog()->settings()->get('system')->get('lang');
             $lang_name = $ln[$lang_code] ?? $lang_code;
             $lang_flag = file_exists(
                 dirname(__DIR__) .
                 '/img/flags/' .
                 $lang_code . '.png'
             ) ?
-                '<img src="' . dcCore::app()->blog->getQmarkURL() .
+                '<img src="' . App::blog()->getQmarkURL() .
                     'pf=postInfoWidget/img/flags/' .
                     $lang_code . '.png" alt="' . $lang_name . '" />' :
                 '';
@@ -267,13 +260,13 @@ class Widgets
                 'author',
                 str_replace(
                     '%T',
-                    dcCore::app()->ctx->__get('posts')->getAuthorLink(),
+                    App::frontend()->context()->__get('posts')->getAuthorLink(),
                     Html::escapeHTML($w->__get('author_str'))
                 )
             );
         }
 
-        if ($w->__get('category_str') != '' && dcCore::app()->ctx->__get('posts')->f('cat_id')) {
+        if ($w->__get('category_str') != '' && App::frontend()->context()->__get('posts')->f('cat_id')) {
             $content .= self::li(
                 $w,
                 'category',
@@ -281,25 +274,25 @@ class Widgets
                     '%T',
                     sprintf(
                         $link,
-                        dcCore::app()->ctx->__get('posts')->__call('getCategoryURL', []),
-                        Html::escapeHTML(dcCore::app()->ctx->__get('posts')->f('cat_title'))
+                        App::frontend()->context()->__get('posts')->__call('getCategoryURL', []),
+                        Html::escapeHTML(App::frontend()->context()->__get('posts')->f('cat_title'))
                     ),
                     Html::escapeHTML($w->__get('category_str'))
                 )
             );
         }
 
-        if ($w->__get('tag_str') != '' && dcCore::app()->plugins->moduleExists('tags')) {
-            $meta = dcCore::app()->meta->getMetadata([
+        if ($w->__get('tag_str') != '' && App::plugins()->moduleExists('tags')) {
+            $meta = App::meta()->getMetadata([
                 'meta_type' => 'tag',
-                'post_id'   => dcCore::app()->ctx->__get('posts')->f('post_id'),
+                'post_id'   => App::frontend()->context()->__get('posts')->f('post_id'),
             ]);
             $metas = [];
             while ($meta->fetch()) {
                 $metas[$meta->f('meta_id')] = sprintf(
                     $link,
-                    dcCore::app()->blog->url .
-                        dcCore::app()->url->getBase('tag') . '/' .
+                    App::blog()->url() .
+                        App::url()->getBase('tag') . '/' .
                         rawurlencode($meta->f('meta_id')),
                     $meta->f('meta_id')
                 );
@@ -318,7 +311,7 @@ class Widgets
         }
 
         if ($w->__get('attachment_str') != '') {
-            $nb = dcCore::app()->ctx->__get('posts')->__call('countMedia', []);
+            $nb = App::frontend()->context()->__get('posts')->__call('countMedia', []);
             if ($nb == 0) {
                 $attachment_numeric = 0;
                 $attachment_textual = __('no attachment');
@@ -357,8 +350,8 @@ class Widgets
             );
         }
 
-        if ($w->__get('comment_str') != '' && dcCore::app()->ctx->__get('posts')->__call('commentsActive', [])) {
-            $nb = (int) dcCore::app()->ctx->__get('posts')->f('nb_comment');
+        if ($w->__get('comment_str') != '' && App::frontend()->context()->__get('posts')->__call('commentsActive', [])) {
+            $nb = (int) App::frontend()->context()->__get('posts')->f('nb_comment');
             if ($nb == 0) {
                 $comment_numeric = 0;
                 $comment_textual = __('no comment');
@@ -397,8 +390,8 @@ class Widgets
             );
         }
 
-        if ($w->__get('trackback_str') != '' && dcCore::app()->ctx->__get('posts')->__call('trackbacksActive', [])) {
-            $nb = (int) dcCore::app()->ctx->__get('posts')->f('nb_trackback');
+        if ($w->__get('trackback_str') != '' && App::frontend()->context()->__get('posts')->__call('trackbacksActive', [])) {
+            $nb = (int) App::frontend()->context()->__get('posts')->f('nb_trackback');
             if ($nb == 0) {
                 $trackback_numeric = 0;
                 $trackback_textual = __('no trackback');
@@ -446,26 +439,26 @@ class Widgets
                     [
                         sprintf(
                             $link,
-                            dcCore::app()->ctx->__get('posts')->__call('getURL', []),
+                            App::frontend()->context()->__get('posts')->__call('getURL', []),
                             __('Permalink')
                         ),
-                        dcCore::app()->ctx->__get('posts')->__call('getURL', []),
+                        App::frontend()->context()->__get('posts')->__call('getURL', []),
                     ],
                     Html::escapeHTML($w->__get('permalink_str'))
                 )
             );
         }
 
-        if ($w->__get('feed') && dcCore::app()->ctx->__get('posts')->__call('commentsActive', [])) {
+        if ($w->__get('feed') && App::frontend()->context()->__get('posts')->__call('commentsActive', [])) {
             $content .= self::li(
                 $w,
                 'feed',
                 sprintf(
                     $link,
-                    dcCore::app()->blog->url .
-                        dcCore::app()->url->getBase('feed') .
+                    App::blog()->url() .
+                        App::url()->getBase('feed') .
                         '/atom/comments/' .
-                        dcCore::app()->ctx->__get('posts')->f('post_id'),
+                        App::frontend()->context()->__get('posts')->f('post_id'),
                     __("This post's comments feed")
                 )
             );
@@ -473,7 +466,7 @@ class Widgets
 
         if ($w->__get('navprevpost')) {
             $npp = self::nav(
-                dcCore::app()->ctx->__get('posts'),
+                App::frontend()->context()->__get('posts'),
                 -1,
                 false,
                 __('Previous entry'),
@@ -489,7 +482,7 @@ class Widgets
         }
         if ($w->__get('navnextpost')) {
             $nnp = self::nav(
-                dcCore::app()->ctx->__get('posts'),
+                App::frontend()->context()->__get('posts'),
                 1,
                 false,
                 __('Next entry'),
@@ -506,7 +499,7 @@ class Widgets
 
         if ($w->__get('navprevcat')) {
             $npc = self::nav(
-                dcCore::app()->ctx->__get('posts'),
+                App::frontend()->context()->__get('posts'),
                 -1,
                 true,
                 __('Previous entry of this category'),
@@ -523,7 +516,7 @@ class Widgets
 
         if ($w->__get('navnextcat')) {
             $nnc = self::nav(
-                dcCore::app()->ctx->__get('posts'),
+                App::frontend()->context()->__get('posts'),
                 1,
                 true,
                 __('Next entry of this category'),
@@ -539,7 +532,7 @@ class Widgets
         }
 
         # --BEHAVIOR-- postInfoWidgetPublic
-        $content .= dcCore::app()->callBehavior('postInfoWidgetPublic', $w);
+        $content .= (string) App::behavior()->callBehavior('postInfoWidgetPublic', $w);
 
         if (empty($content)) {
             return '';
@@ -581,13 +574,12 @@ class Widgets
 
     public static function li(WidgetsElement $w, string $i, string $c): string
     {
-        // nullsafe
-        if (is_null(dcCore::app()->blog)) {
+        if (!App::blog()->isDefined()) {
             return '';
         }
 
         $s = ' style="padding-left:%spx;background: transparent url(\'' .
-            dcCore::app()->blog->getQmarkURL() .
+            App::blog()->getQmarkURL() .
             'pf=postInfoWidget/img/%s%s.png\') no-repeat left center;"';
         if ($w->__get('style') == 'small') {
             $s = sprintf($s, 16, $i, '-small');
@@ -603,12 +595,11 @@ class Widgets
 
     public static function nav(MetaRecord $p, int $d, bool $r, string $t, string $c): string
     {
-        // nullsafe
-        if (is_null(dcCore::app()->blog)) {
+        if (!App::blog()->isDefined()) {
             return '';
         }
 
-        $rs = dcCore::app()->blog->getNextPost($p, $d, $r);
+        $rs = App::blog()->getNextPost($p, $d, $r);
         if (is_null($rs)) {
             return '';
         }
