@@ -17,7 +17,7 @@ $this->registerModule(
     'Entry information list',
     'Show Entry informations on a widget',
     'Jean-Christian Denis, Pierre Van Glabeke',
-    '1.2',
+    '1.2.1',
     [
         'requires'    => [['core', '2.28']],
         'permissions' => 'My',
