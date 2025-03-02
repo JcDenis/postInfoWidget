@@ -4,7 +4,7 @@
 ![Date](https://img.shields.io/badge/date-2023.10.20-c44d58.svg)
 [![Dotclear](https://img.shields.io/badge/dotclear-v2.28-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/postInfoWidget)
-[![License](https://img.shields.io/badge/license-GPL--2.0-ececec.svg)](https://github.com/JcDenis/postInfoWidget/src/branch/master/LICENSE)
+[![License](https://img.shields.io/badge/license-GPL--2.0-ececec.svg)](https://github.com/JcDenis/postInfoWidget/blob/master/LICENSE)
 
 ## ABOUT
 
@@ -27,7 +27,7 @@ Add and configure "Entry information list" from widgets manager.
 
 ## LINKS
 
-* [License](https://github.com/JcDenis/postInfoWidget/src/branch/master/LICENSE)
+* [License](https://github.com/JcDenis/postInfoWidget/blob/master/LICENSE)
 * [Packages & details](https://github.com/JcDenis/postInfoWidget/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/postInfoWidget))
 * [Sources & contributions](https://github.com/JcDenis/postInfoWidget)
 * [Issues & security](https://github.com/JcDenis/postInfoWidget/issues)
