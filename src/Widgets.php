@@ -6,15 +6,11 @@ namespace Dotclear\Plugin\postInfoWidget;
 
 use Dotclear\App;
 use Dotclear\Database\MetaRecord;
-use Dotclear\Helper\{
-    Date,
-    Html\Html,
-    L10n
-};
-use Dotclear\Plugin\widgets\{
-    WidgetsStack,
-    WidgetsElement
-};
+use Dotclear\Helper\Date;
+use Dotclear\Helper\Html\Html;
+use Dotclear\Helper\L10n;
+use Dotclear\Plugin\widgets\WidgetsStack;
+use Dotclear\Plugin\widgets\WidgetsElement;
 
 /**
  * @brief       postInfoWidget widgets class.
@@ -74,7 +70,7 @@ class Widgets
             );
 
         if (App::plugins()->moduleExists('tags')) {
-            $w->__get('postinfowidget')->setting(
+            $w->get('postinfowidget')->setting(
                 'tag_str',
                 __('Tags text (%T = tags list):'),
                 __('Tags: %T'),
@@ -82,7 +78,7 @@ class Widgets
             );
         }
 
-        $w->__get('postinfowidget')
+        $w->get('postinfowidget')
             ->setting(
                 'attachment_str',
                 __('Attachments text (%T = text, %D = numeric):'),
@@ -172,7 +168,7 @@ class Widgets
         # --BEHAVIOR-- postInfoWidgetAdmin
         App::behavior()->callBehavior('postInfoWidgetAdmin', $w);
 
-        $w->__get('postinfowidget')
+        $w->get('postinfowidget')
             ->addContentOnly()
             ->addClass()
             ->addOffline();
@@ -181,7 +177,7 @@ class Widgets
     public static function publicWidget(WidgetsElement $w): string
     {
         if (!App::blog()->isDefined()
-            || $w->__get('offline')
+            || $w->get('offline')
             || App::url()->type != 'post'
             || !App::frontend()->context()->__get('posts')->f('post_id')
         ) {
@@ -191,43 +187,43 @@ class Widgets
         $link    = '<a href="%s">%s</a>';
         $content = '';
 
-        if ($w->__get('dt_str') != '') {
+        if ($w->get('dt_str') != '') {
             $content .= self::li(
                 $w,
                 'date',
                 Date::str(
-                    $w->__get('dt_str'),
+                    $w->get('dt_str'),
                     (int) strtotime(App::frontend()->context()->__get('posts')->f('post_dt')),
                     App::blog()->settings()->get('system')->get('blog_timezone')
                 )
             );
         }
 
-        if ($w->__get('creadt_str') != '') {
+        if ($w->get('creadt_str') != '') {
             $content .= self::li(
                 $w,
                 'create',
                 Date::str(
-                    $w->__get('creadt_str'),
+                    $w->get('creadt_str'),
                     (int) strtotime(App::frontend()->context()->__get('posts')->post_creadt),
                     App::blog()->settings()->get('system')->get('blog_timezone')
                 )
             );
         }
 
-        if ($w->__get('upddt_str') != '') {
+        if ($w->get('upddt_str') != '') {
             $content .= self::li(
                 $w,
                 'update',
                 Date::str(
-                    $w->__get('upddt_str'),
+                    $w->get('upddt_str'),
                     (int) strtotime(App::frontend()->context()->__get('posts')->f('post_upddt')),
                     App::blog()->settings()->get('system')->get('blog_timezone')
                 )
             );
         }
 
-        if ($w->__get('lang_str') != '') {
+        if ($w->get('lang_str') != '') {
             $ln        = L10n::getISOcodes();
             $lang_code = App::frontend()->context()->__get('posts')->f('post_lang') ?
                 App::frontend()->context()->__get('posts')->f('post_lang') :
@@ -249,24 +245,24 @@ class Widgets
                 str_replace(
                     ['%T', '%C', '%F'],
                     [$lang_name, $lang_code, $lang_flag],
-                    Html::escapeHTML($w->__get('lang_str'))
+                    Html::escapeHTML($w->get('lang_str'))
                 )
             );
         }
 
-        if ($w->__get('author_str') != '') {
+        if ($w->get('author_str') != '') {
             $content .= self::li(
                 $w,
                 'author',
                 str_replace(
                     '%T',
                     App::frontend()->context()->__get('posts')->getAuthorLink(),
-                    Html::escapeHTML($w->__get('author_str'))
+                    Html::escapeHTML($w->get('author_str'))
                 )
             );
         }
 
-        if ($w->__get('category_str') != '' && App::frontend()->context()->__get('posts')->f('cat_id')) {
+        if ($w->get('category_str') != '' && App::frontend()->context()->__get('posts')->f('cat_id')) {
             $content .= self::li(
                 $w,
                 'category',
@@ -277,12 +273,12 @@ class Widgets
                         App::frontend()->context()->__get('posts')->__call('getCategoryURL', []),
                         Html::escapeHTML(App::frontend()->context()->__get('posts')->f('cat_title'))
                     ),
-                    Html::escapeHTML($w->__get('category_str'))
+                    Html::escapeHTML($w->get('category_str'))
                 )
             );
         }
 
-        if ($w->__get('tag_str') != '' && App::plugins()->moduleExists('tags')) {
+        if ($w->get('tag_str') != '' && App::plugins()->moduleExists('tags')) {
             $meta = App::meta()->getMetadata([
                 'meta_type' => 'tag',
                 'post_id'   => App::frontend()->context()->__get('posts')->f('post_id'),
@@ -304,13 +300,13 @@ class Widgets
                     str_replace(
                         '%T',
                         implode(', ', $metas),
-                        Html::escapeHTML($w->__get('tag_str'))
+                        Html::escapeHTML($w->get('tag_str'))
                     )
                 );
             }
         }
 
-        if ($w->__get('attachment_str') != '') {
+        if ($w->get('attachment_str') != '') {
             $nb = App::frontend()->context()->__get('posts')->__call('countMedia', []);
             if ($nb == 0) {
                 $attachment_numeric = 0;
@@ -344,13 +340,13 @@ class Widgets
                 'attachment',
                 str_replace(
                     ['%T', '%D'],
-                    [$attachment_textual, $attachment_numeric],
-                    Html::escapeHTML($w->__get('attachment_str'))
+                    [(string) $attachment_textual, (string) $attachment_numeric],
+                    Html::escapeHTML($w->get('attachment_str'))
                 )
             );
         }
 
-        if ($w->__get('comment_str') != '' && App::frontend()->context()->__get('posts')->__call('commentsActive', [])) {
+        if ($w->get('comment_str') != '' && App::frontend()->context()->__get('posts')->__call('commentsActive', [])) {
             $nb = (int) App::frontend()->context()->__get('posts')->f('nb_comment');
             if ($nb == 0) {
                 $comment_numeric = 0;
@@ -384,13 +380,13 @@ class Widgets
                 'comment',
                 str_replace(
                     ['%T', '%D'],
-                    [$comment_textual, $comment_numeric],
-                    Html::escapeHTML($w->__get('comment_str'))
+                    [(string) $comment_textual, (string) $comment_numeric],
+                    Html::escapeHTML($w->get('comment_str'))
                 )
             );
         }
 
-        if ($w->__get('trackback_str') != '' && App::frontend()->context()->__get('posts')->__call('trackbacksActive', [])) {
+        if ($w->get('trackback_str') != '' && App::frontend()->context()->__get('posts')->__call('trackbacksActive', [])) {
             $nb = (int) App::frontend()->context()->__get('posts')->f('nb_trackback');
             if ($nb == 0) {
                 $trackback_numeric = 0;
@@ -424,13 +420,13 @@ class Widgets
                 'trackback',
                 str_replace(
                     ['%T', '%D'],
-                    [$trackback_textual, $trackback_numeric],
-                    Html::escapeHTML($w->__get('trackback_str'))
+                    [(string) $trackback_textual, (string) $trackback_numeric],
+                    Html::escapeHTML($w->get('trackback_str'))
                 )
             );
         }
 
-        if ($w->__get('permalink_str')) {
+        if ($w->get('permalink_str')) {
             $content .= self::li(
                 $w,
                 'permalink',
@@ -444,12 +440,12 @@ class Widgets
                         ),
                         App::frontend()->context()->__get('posts')->__call('getURL', []),
                     ],
-                    Html::escapeHTML($w->__get('permalink_str'))
+                    Html::escapeHTML($w->get('permalink_str'))
                 )
             );
         }
 
-        if ($w->__get('feed') && App::frontend()->context()->__get('posts')->__call('commentsActive', [])) {
+        if ($w->get('feed') && App::frontend()->context()->__get('posts')->__call('commentsActive', [])) {
             $content .= self::li(
                 $w,
                 'feed',
@@ -464,13 +460,13 @@ class Widgets
             );
         }
 
-        if ($w->__get('navprevpost')) {
+        if ($w->get('navprevpost')) {
             $npp = self::nav(
                 App::frontend()->context()->__get('posts'),
                 -1,
                 false,
                 __('Previous entry'),
-                $w->__get('navprevpost')
+                $w->get('navprevpost')
             );
             if ($npp) {
                 $content .= self::li(
@@ -480,13 +476,13 @@ class Widgets
                 );
             }
         }
-        if ($w->__get('navnextpost')) {
+        if ($w->get('navnextpost')) {
             $nnp = self::nav(
                 App::frontend()->context()->__get('posts'),
                 1,
                 false,
                 __('Next entry'),
-                $w->__get('navnextpost')
+                $w->get('navnextpost')
             );
             if ($nnp) {
                 $content .= self::li(
@@ -497,13 +493,13 @@ class Widgets
             }
         }
 
-        if ($w->__get('navprevcat')) {
+        if ($w->get('navprevcat')) {
             $npc = self::nav(
                 App::frontend()->context()->__get('posts'),
                 -1,
                 true,
                 __('Previous entry of this category'),
-                $w->__get('navprevcat')
+                $w->get('navprevcat')
             );
             if ($npc) {
                 $content .= self::li(
@@ -514,13 +510,13 @@ class Widgets
             }
         }
 
-        if ($w->__get('navnextcat')) {
+        if ($w->get('navnextcat')) {
             $nnc = self::nav(
                 App::frontend()->context()->__get('posts'),
                 1,
                 true,
                 __('Next entry of this category'),
-                $w->__get('navnextcat')
+                $w->get('navnextcat')
             );
             if ($nnc) {
                 $content .= self::li(
@@ -564,10 +560,10 @@ class Widgets
                 }
         //*/
         return $w->renderDiv(
-            (bool) $w->__get('content_only'),
-            'postinfowidget ' . $w->__get('class'),
+            (bool) $w->get('content_only'),
+            'postinfowidget ' . $w->get('class'),
             '',
-            ($w->__get('title') ? $w->renderTitle(Html::escapeHTML($w->__get('title'))) : '') .
+            ($w->get('title') ? $w->renderTitle(Html::escapeHTML($w->get('title'))) : '') .
                 sprintf('<ul>%s</ul>', $content)
         );
     }
@@ -581,9 +577,9 @@ class Widgets
         $s = ' style="padding-left:%spx;background: transparent url(\'' .
             App::blog()->getQmarkURL() .
             'pf=postInfoWidget/img/%s%s.png\') no-repeat left center;"';
-        if ($w->__get('style') == 'small') {
+        if ($w->get('style') == 'small') {
             $s = sprintf($s, 16, $i, '-small');
-        } elseif ($w->__get('style') == 'normal') {
+        } elseif ($w->get('style') == 'normal') {
             $s = sprintf($s, 20, $i, '');
         } else {
             $s = '';
