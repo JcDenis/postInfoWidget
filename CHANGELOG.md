@@ -1,3 +1,8 @@
+postInfoWidget 1.x - xxxx.xx.xx
+===========================================================
+* Bump Dotclear from 2.36 to 2.39
+* Code review (phpstan max)
+
 postInfoWidget 1.3 - 2025.09.13
 ===========================================================
 * Bump Dotclear from 2.28 to 2.36
