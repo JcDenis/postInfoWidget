@@ -461,7 +461,7 @@ class Widgets
                     App::blog()->url() .
                         App::url()->getBase('feed') .
                         '/atom/comments/' .
-                        App::frontend()->context()->__get('posts')->strField('post_id'),
+                        (string) App::frontend()->context()->__get('posts')->intField('post_id'),
                     __("This post's comments feed")
                 )
             );
