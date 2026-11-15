@@ -12,6 +12,8 @@ _postInfoWidget_ is a plugin for the open-source web publishing software called 
 
 > Show entry details in a widget.
 
+A [user guide in French](https://github.com/JcDenis/postInfoWidget/blob/master/docs/fr/utilisation.md) is available.
+
 ## REQUIREMENTS
 
 * Dotclear 2.39
@@ -27,6 +29,7 @@ Add and configure "Entry information list" from widgets manager.
 
 ## LINKS
 
+* [User guide (in French)](https://github.com/JcDenis/postInfoWidget/blob/master/docs/fr/utilisation.md)
 * [License](https://github.com/JcDenis/postInfoWidget/blob/master/LICENSE)
 * [Packages & details](https://github.com/JcDenis/postInfoWidget/releases) (or on [Repository](https://dotclear.org/plugin/detail/postInfoWidget))
 * [Sources & contributions](https://github.com/JcDenis/postInfoWidget)
