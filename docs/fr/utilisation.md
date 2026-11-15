@@ -12,7 +12,7 @@ postInfoWidget ajoute un gadget qui affiche les informations d'un billet (dates,
 
 ## Ajouter le gadget
 
-Allez dans **Gadgets**, ajoutez « Liste d'informations du billet » (nom affiché : « Entry information list ») à la zone de votre choix, puis enregistrez.
+Allez dans **Gadgets**, ajoutez le gadget « Entry information list » (son nom n'est pas traduit en français) à la zone de votre choix, puis enregistrez.
 
 Le gadget n'apparaît que sur la page d'un billet. Sur l'accueil, les listes de billets, etc., il est invisible.
 
@@ -59,6 +59,6 @@ Certaines lignes n'apparaissent que si elles ont un sens : la catégorie si le b
 
 ## Bon à savoir
 
-* L'option de style s'appelle « Try to adapt style » : ce libellé n'est pas traduit en français.
+* Le nom du gadget (« Entry information list ») et le libellé de l'option de style (« Try to adapt style ») ne sont pas traduits en français.
 * Plusieurs fautes dans l'interface en français : « Á propos de ce billet » (titre par défaut), « lien pemanent ».
 * Le gadget ne fonctionne que sur les billets : il n'apparaît pas sur les pages statiques.
