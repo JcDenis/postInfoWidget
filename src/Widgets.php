@@ -185,7 +185,7 @@ class Widgets
     {
         if (!App::blog()->isDefined()
             || $w->get('offline')
-            || !App::url()->isType('post')
+            || !App::url()->isType(['post', 'pages'])
             || !(App::frontend()->context()->__get('posts') instanceof MetaRecord)
         ) {
             return '';
@@ -200,8 +200,8 @@ class Widgets
                 'date',
                 Date::str(
                     $w->get('dt_str'),
-                    (int) strtotime(App::frontend()->context()->__get('posts')->strField('post_dt')),
-                    App::blog()->settings()->get('system')->getStr('blog_timezone', false)
+                    // post_dt is already in entry timezone
+                    (int) strtotime(App::frontend()->context()->__get('posts')->strField('post_dt'))
                 )
             );
         }
@@ -213,19 +213,19 @@ class Widgets
                 Date::str(
                     $w->get('creadt_str'),
                     (int) strtotime(App::frontend()->context()->__get('posts')->strField('post_creadt')),
-                    App::blog()->settings()->get('system')->getStr('blog_timezone', false)
+                    self::timezone()
                 )
             );
         }
 
-        if (is_string($w->get('upddt_str')) && $w->get('upddt_str') != '') {
+        if (is_string($w->get('upddt_str')) && $w->get('upddt_str') != '' && self::isUpdated(App::frontend()->context()->__get('posts'))) {
             $content .= self::li(
                 $w,
                 'update',
                 Date::str(
                     $w->get('upddt_str'),
                     (int) strtotime(App::frontend()->context()->__get('posts')->strField('post_upddt')),
-                    App::blog()->settings()->get('system')->getStr('blog_timezone', false)
+                    self::timezone()
                 )
             );
         }
@@ -243,7 +243,7 @@ class Widgets
             ) ?
                 '<img src="' . App::blog()->getQmarkURL() .
                     'pf=postInfoWidget/img/flags/' .
-                    $lang_code . '.png" alt="' . $lang_name . '" />' :
+                    $lang_code . '.png" alt="' . Html::escapeHTML($lang_name) . '" />' :
                 '';
 
             $content .= self::li(
@@ -251,7 +251,7 @@ class Widgets
                 'lang',
                 str_replace(
                     ['%T', '%C', '%F'],
-                    [$lang_name, $lang_code, $lang_flag],
+                    [Html::escapeHTML($lang_name), Html::escapeHTML($lang_code), $lang_flag],
                     Html::escapeHTML($w->get('lang_str'))
                 )
             );
@@ -573,6 +573,30 @@ class Widgets
             (is_string($w->get('title')) && !empty($w->get('title')) ? $w->renderTitle(Html::escapeHTML($w->get('title'))) : '') .
                 sprintf('<ul>%s</ul>', $content)
         );
+    }
+
+    /**
+     * Get entry timezone, or blog timezone.
+     */
+    private static function timezone(): string
+    {
+        $tz = App::frontend()->context()->__get('posts') instanceof MetaRecord ?
+            App::frontend()->context()->__get('posts')->strField('post_tz') : '';
+
+        return $tz !== '' ? $tz : App::blog()->settings()->get('system')->getStr('blog_timezone', false);
+    }
+
+    /**
+     * Check if entry has been updated after its creation and its publication date.
+     */
+    private static function isUpdated(MetaRecord $rs): bool
+    {
+        $upd = (int) strtotime($rs->strField('post_upddt'));
+        $cre = (int) strtotime($rs->strField('post_creadt'));
+        // post_dt is in entry timezone, others are UTC
+        $dt = (int) strtotime($rs->strField('post_dt')) - Date::getTimeOffset(self::timezone());
+
+        return $upd > max($cre, $dt) + 60;
     }
 
     public static function li(WidgetsElement $w, string $i, string $c): string
