@@ -25,7 +25,7 @@ msgstr "Afficher les informations d'un billet dans un widget"
 
 #: _widgets.php:37
 msgid "About this entry"
-msgstr "Á propos de ce billet"
+msgstr "À propos de ce billet"
 
 #: _widgets.php:40
 msgid "Publish date text:"
@@ -109,7 +109,7 @@ msgstr "Rétroliens : %T"
 
 #: _widgets.php:105
 msgid "Permalink text (%T = text link, %F = full link):"
-msgstr "Texte pour le lien pemanent (%T = texte, %F = complet) :"
+msgstr "Texte pour le lien permanent (%T = texte, %F = complet) :"
 
 #: _widgets.php:106
 #: _widgets.php:118
@@ -194,3 +194,33 @@ msgstr "Billet suivant de cette catégorie"
 msgid "Try to adapt style:"
 msgstr "Essayer d'adapter le style :"
 
+
+msgid "Entry information list"
+msgstr "Liste d'informations du billet"
+
+msgid "Try to adapt style"
+msgstr "Essayer d'adapter le style"
+
+msgid "one attachment"
+msgstr "une annexe"
+
+msgid "%d attachments"
+msgstr "%d annexes"
+
+msgid "Permalink"
+msgstr "Lien permanent"
+
+msgid "This post's comments feed"
+msgstr "Le flux des commentaires de ce billet"
+
+msgid "one comment"
+msgstr "un commentaire"
+
+msgid "%d comments"
+msgstr "%d commentaires"
+
+msgid "one trackback"
+msgstr "un rétrolien"
+
+msgid "%d trackbacks"
+msgstr "%d rétroliens"
