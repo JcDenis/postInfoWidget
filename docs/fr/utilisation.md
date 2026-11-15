@@ -12,9 +12,9 @@ postInfoWidget ajoute un gadget qui affiche les informations d'un billet (dates,
 
 ## Ajouter le gadget
 
-Allez dans **Gadgets**, ajoutez le gadget « Entry information list » (son nom n'est pas traduit en français) à la zone de votre choix, puis enregistrez.
+Allez dans **Gadgets**, ajoutez le gadget « Liste d'informations du billet » à la zone de votre choix, puis enregistrez.
 
-Le gadget n'apparaît que sur la page d'un billet. Sur l'accueil, les listes de billets, etc., il est invisible.
+Le gadget n'apparaît que sur la page d'un billet ou d'une page statique. Sur l'accueil, les listes de billets, etc., il est invisible.
 
 ![Gadget public](img/gadget-public.png)
 
@@ -27,13 +27,13 @@ Cliquez sur le nom du gadget pour déplier ses réglages.
 Chaque ligne d'information correspond à un champ texte. **Laissez le champ vide pour ne pas afficher la ligne.**
 
 * **Titre** : le titre du gadget (« À propos de ce billet » par défaut).
-* Dates de publication, de création et de dernière mise à jour. Le format utilise les codes de date PHP (`%d/%m/%Y %H:%M`).
+* Dates de publication, de création et de dernière mise à jour. Le format utilise les codes de date PHP (`%d/%m/%Y %H:%M`). Les heures sont affichées dans le fuseau horaire du billet.
 * Langue, auteur, catégorie, mots-clés.
 * Nombre d'annexes, de commentaires et de rétroliens.
 * Lien permanent.
 * **Afficher l'URL du flux des commentaires**.
 * Liens vers le billet précédent ou suivant, du blog entier ou de la même catégorie.
-* **Style** : sans style, petite icône ou icône normale devant chaque ligne.
+* **Essayer d'adapter le style** : sans style, petite icône ou icône normale devant chaque ligne.
 * Les options habituelles des gadgets : contenu seul, classe CSS, hors ligne.
 
 ## Les codes utilisables
@@ -53,12 +53,10 @@ Exemple : seuls la date, l'auteur, la catégorie, les mots-clés, le nombre de c
 
 ![Gadget personnalisé](img/gadget-personnalise.png)
 
-Les réglages utilisés : `Écrit le %d/%m/%Y`, `Par %T`, `%D commentaire(s)`, `← %F` et `%F →`, style « sans style », les autres champs vidés.
+Les réglages utilisés : `Écrit le %d/%m/%Y`, `Par %T`, `%D commentaire(s)`, `← %F` et `%F →` pour la navigation dans la catégorie, style « sans style », les autres champs vidés.
 
-Certaines lignes n'apparaissent que si elles ont un sens : la catégorie si le billet en a une, les mots-clés s'il y en a (plugin Tags), les commentaires et rétroliens s'ils sont ouverts, les liens de navigation s'il existe un billet voisin.
+Certaines lignes n'apparaissent que si elles ont un sens : la date de dernière mise à jour si le billet a été modifié après sa création et sa publication, la catégorie si le billet en a une, les mots-clés s'il y en a (plugin Tags), les commentaires et rétroliens s'ils sont ouverts, les liens de navigation s'il existe un billet voisin.
 
 ## Bon à savoir
 
-* Le nom du gadget (« Entry information list ») et le libellé de l'option de style (« Try to adapt style ») ne sont pas traduits en français.
-* Plusieurs fautes dans l'interface en français : « Á propos de ce billet » (titre par défaut), « lien pemanent ».
-* Le gadget ne fonctionne que sur les billets : il n'apparaît pas sur les pages statiques.
+* Le lien précédent ou suivant du blog entier et celui de la catégorie peuvent pointer vers le même billet : gardez l'un ou l'autre pour éviter les doublons.
