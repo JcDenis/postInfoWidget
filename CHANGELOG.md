@@ -1,3 +1,7 @@
+postInfoWidget 1.6.1 - 2026.11.15
+===========================================================
+* [lang] Do not override core translations
+
 postInfoWidget 1.6 - 2026.11.15
 ===========================================================
 * [fix] Update date only when updated, dates timezone, escape flag alt, show on pages too
