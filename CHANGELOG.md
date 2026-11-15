@@ -1,3 +1,10 @@
+postInfoWidget 1.6 - 2026.11.15
+===========================================================
+* Add Claude to contributors
+* [fix] Update date only when updated, dates timezone, escape flag alt, show on pages too
+* [lang] Missing translations and typos
+* [docs] Add a user guide in French, with screenshots
+
 postInfoWidget 1.5 - 2026.11.05
 ===========================================================
 * Fix comments feed link on SQLite
