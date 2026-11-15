@@ -211,7 +211,7 @@ msgid "Permalink"
 msgstr "Lien permanent"
 
 msgid "This post's comments feed"
-msgstr "Le flux des commentaires de ce billet"
+msgstr "Fil des commentaires de ce billet"
 
 msgid "one comment"
 msgstr "un commentaire"
